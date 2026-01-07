@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ProjectManager.Presentation.DTO;
+using ProjectManager.Application.DTO;
 
 namespace ProjectManager.Application.MapProfiles
 {

@@ -6,7 +6,7 @@ namespace ProjectManager.Presentation.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController(ISecurityApplication security) : ControllerBase
+    public class AuthController(ISecurityService security) : ControllerBase
     {
         [HttpPost(Name = "login")]
         public async Task<IResult> Login(LoginDTO login)

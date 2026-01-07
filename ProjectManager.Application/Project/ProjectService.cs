@@ -2,7 +2,7 @@
 
 namespace ProjectManager.Application.Project
 {
-    public class ProjectApplication : IProjectApplication
+    public class ProjectService : IProjectService
     {
     }
 }

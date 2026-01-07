@@ -10,7 +10,7 @@ namespace ProjectManager.Controllers
         [HttpGet(Name = "GetProjects")]
         public async Task<ProjectDTO> Get()
         {
-            
+            return new ProjectDTO();
         }
     }
 }

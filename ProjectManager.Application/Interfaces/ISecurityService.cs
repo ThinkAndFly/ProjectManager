@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace ProjectManager.Application.Interfaces
 {
-    public interface ISecurityApplication
+    public interface ISecurityService
     {
         public Task<string> Login(LoginDTO login);
     }
