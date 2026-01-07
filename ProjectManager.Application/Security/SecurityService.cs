@@ -12,10 +12,8 @@ using System.Security.Claims;
 
 namespace ProjectManager.Application.Security
 {
-    public class SecurityService(IConfiguration config, IUserRepository userRepository) : ISecurityService
+    public class SecurityService(IConfiguration config, IUserRepository userRepository, IPasswordHasher<User> passwordHasher) : ISecurityService
     {
-        private readonly PasswordHasher<User> _passwordHasher = new();
-
         public async Task<string> Login(LoginDTO login)
         {
             var user = await userRepository.GetByUsernameAsync(login.Username);
@@ -23,18 +21,21 @@ namespace ProjectManager.Application.Security
             if (user is null)
                 throw new InvalidCredentialException();
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, login.Password);
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, login.Password);
 
             if (result == PasswordVerificationResult.Failed)
                 throw new InvalidCredentialException();
 
-            var privateKey = RSAKeyHelper.GetPrivateKey(config);
-            var creds = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
-            var claims = BuildClaims(user);
+            return BuildToken(user);
+        }
 
+        private string BuildToken(User user)
+        {
+            var creds = BuildCredentials();
+            var claims = BuildClaims(user);
             var token = new JwtSecurityToken(
-                issuer: config["Jwt:Issuer"],
-                audience: config["Jwt:Audience"],
+                issuer: "YourIssuer",
+                audience: "YourAudience",
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds);
@@ -42,6 +43,11 @@ namespace ProjectManager.Application.Security
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        private SigningCredentials BuildCredentials()
+        {
+            var privateKey = RSAKeyHelper.GetPrivateKey(config);
+            return new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
+        }
 
         private static IReadOnlyCollection<Claim> BuildClaims(User user)
         {
