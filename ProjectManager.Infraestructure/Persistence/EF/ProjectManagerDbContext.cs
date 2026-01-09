@@ -3,7 +3,7 @@ using ProjectManager.Domain.Entities;
 
 namespace ProjectManager.Infraestructure.Persistence.EF
 {
-    public class ProjectDbContext(DbContextOptions<ProjectDbContext> options) : DbContext(options)
+    public class ProjectManagerDbContext(DbContextOptions<ProjectManagerDbContext> options) : DbContext(options)
     {
         public DbSet<User> Users => Set<User>();
         public DbSet<Project> Projects => Set<Project>();

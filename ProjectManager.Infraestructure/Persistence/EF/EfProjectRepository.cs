@@ -4,7 +4,7 @@ using ProjectManager.Domain.Interfaces;
 
 namespace ProjectManager.Infraestructure.Persistence.EF
 {
-    public class EfProjectRepository(ProjectDbContext dbContext) : IProjectRepository
+    public class EfProjectRepository(ProjectManagerDbContext dbContext) : IProjectRepository
     {
         public async Task<IEnumerable<Project>> GetAsync(string? status, string? ownerId, CancellationToken cancellationToken = default)
         {

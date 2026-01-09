@@ -2,7 +2,7 @@
   <Project Path="ProjectManager.Application/ProjectManager.Application.csproj" />
   <Project Path="ProjectManager.Domain/ProjectManager.Domain.csproj" />
   <Project Path="ProjectManager.Infraestructure.Pulumi/ProjectManager.Infraestructure.Pulumi.csproj" />
-  <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.csproj" />
+  <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj" />
   <Project Path="ProjectManager.Test/ProjectManager.Test.csproj" />
   <Project Path="ProjectManager/ProjectManager.Presentation.API.csproj" />
 </Solution>

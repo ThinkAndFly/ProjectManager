@@ -4,7 +4,7 @@ using ProjectManager.Domain.Interfaces;
 
 namespace ProjectManager.Infraestructure.Persistence.EF
 {
-    public class EfUserRepository(ProjectDbContext dbContext) : IUserRepository
+    public class EfUserRepository(ProjectManagerDbContext dbContext) : IUserRepository
     {
         public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
         {

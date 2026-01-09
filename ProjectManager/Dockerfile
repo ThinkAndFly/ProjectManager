@@ -1,30 +1,42 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
+# Base image for runtime
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# This stage is used to build the service project
+# Build image
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ProjectManager/ProjectManager.csproj", "ProjectManager/"]
-RUN dotnet restore "./ProjectManager/ProjectManager.csproj"
-COPY . .
-WORKDIR "/src/ProjectManager"
-RUN dotnet build "./ProjectManager.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Copy csproj files (paths are relative to build context = rootfolder)
+COPY ProjectManager/ProjectManager.Presentation.API.csproj ProjectManager/
+COPY ProjectManager.Application/ProjectManager.Application.csproj ProjectManager.Application/
+COPY ProjectManager.Domain/ProjectManager.Domain.csproj ProjectManager.Domain/
+COPY ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj ProjectManager.Infraestructure/
+COPY ProjectManager.Infraestructure.Pulumi/ProjectManager.Infraestructure.Pulumi.csproj ProjectManager.Infraestructure.Pulumi/
+
+# Restore from API project folder
+WORKDIR /src/ProjectManager
+RUN dotnet restore "./ProjectManager.Presentation.API.csproj"
+
+# Copy the rest of the solution
+WORKDIR /src
+COPY . .
+
+# Build API project
+WORKDIR /src/ProjectManager
+RUN dotnet build "./ProjectManager.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Publish
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ProjectManager.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+WORKDIR /src/ProjectManager
+RUN dotnet publish "./ProjectManager.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Final runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProjectManager.dll"]
+ENTRYPOINT ["dotnet", "ProjectManager.Presentation.API.dll"]
