@@ -9,8 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="MSTest" Version="4.0.1" />
-    <PackageReference Include="Pulumi" Version="3.96.1" />
-    <PackageReference Include="Pulumi.Aws" Version="7.15.0" />
   </ItemGroup>
 
   <ItemGroup>
