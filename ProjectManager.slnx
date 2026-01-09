@@ -3,5 +3,5 @@
   <Project Path="ProjectManager.Domain/ProjectManager.Domain.csproj" />
   <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.csproj" />
   <Project Path="ProjectManager.Test/ProjectManager.Test.csproj" />
-  <Project Path="ProjectManager/ProjectManager.Presentation.csproj" />
+  <Project Path="ProjectManager/ProjectManager.Presentation.API.csproj" />
 </Solution>

@@ -11,13 +11,13 @@ namespace ProjectManager.Application.Projects
         public async Task<IEnumerable<ProjectDTO>> GetAsync(string? status, string? ownerId)
         {
             var projects = await repository.GetAsync(status, ownerId);
-            return projects.Select(MapToDto);
+            return projects.Select(mapper.Map<ProjectDTO>);
         }
 
         public async Task<ProjectDTO?> GetByIdAsync(string id)
         {
             var project = await repository.GetByIdAsync(id);
-            return project is null ? null : MapToDto(project);
+            return project is null ? null : mapper.Map<ProjectDTO>(project);
         }
 
         public async Task<ProjectDTO> CreateAsync(ProjectDTO project)
@@ -35,7 +35,7 @@ namespace ProjectManager.Application.Projects
             };
 
             var created = await repository.CreateAsync(entity);
-            return MapToDto(created);
+            return mapper.Map<ProjectDTO>(created);
         }
 
         public async Task<ProjectDTO?> UpdateAsync(string id, ProjectDTO project)
@@ -60,18 +60,13 @@ namespace ProjectManager.Application.Projects
                 return null;
             }
 
-            return MapToDto(updated);
+            return mapper.Map<ProjectDTO>(updated);
         }
 
         public async Task<bool> DeleteAsync(string id)
         {
             var deleted = await repository.DeleteAsync(id);
             return deleted;
-        }
-
-        private ProjectDTO MapToDto(Project project)
-        {
-            return mapper.Map<ProjectDTO>(project);
         }
     }
 }
