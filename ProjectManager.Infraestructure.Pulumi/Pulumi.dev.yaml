@@ -1,2 +1,11 @@
 config:
   aws:region: us-east-1
+  projectmanager:appName: projectmanager
+  projectmanager:environment: dev
+  projectmanager:dockerContext: ../ProjectManager
+  projectmanager:dbName: ProjectManagerDb
+  projectmanager:dbUsername: pm_app_user
+  projectmanager:dbInstanceClass: db.t3.micro
+  projectmanager:dbAllocatedStorage: 20
+  projectmanager:dbBackupRetentionDays: 7
+  projectmanager:dbDeletionProtection: false
