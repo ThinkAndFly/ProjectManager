@@ -1,16 +1,64 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManager.Application.DTO;
+using ProjectManager.Application.Interfaces;
 
 namespace ProjectManager.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ProjectController : ControllerBase
+    [Route("api/projects")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class ProjectController(IProjectService projectService) : ControllerBase
     {
-        [HttpGet(Name = "GetProjects")]
-        public async Task<ProjectDTO> Get()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProjectDTO>>> GetAll([FromQuery] string? status, [FromQuery] string? owner)
         {
-            return new ProjectDTO();
+            var projects = await projectService.GetAsync(status, owner);
+            return Ok(projects);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProjectDTO>> GetById(string id)
+        {
+            var project = await projectService.GetByIdAsync(id);
+            if (project is null)
+                return NotFound();
+
+            return Ok(project);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProjectDTO>> Create([FromBody] ProjectDTO request)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            var created = await projectService.CreateAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProjectDTO>> Update(string id, [FromBody] ProjectDTO request)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            var updated = await projectService.UpdateAsync(id, request);
+            if (updated is null)
+                return NotFound();
+
+            return Ok(updated);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var deleted = await projectService.DeleteAsync(id);
+            if (!deleted)
+                return NotFound();
+
+            return NoContent();
         }
     }
 }

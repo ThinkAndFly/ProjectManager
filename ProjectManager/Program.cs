@@ -1,14 +1,26 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ProjectManager.Application.Interfaces;
+using ProjectManager.Application.Projects;
 using ProjectManager.Domain.Entities;
+using ProjectManager.Domain.Interfaces;
+using ProjectManager.Infraestructure.Persistence.EF;
 using ProjectManager.Infraestructure.Security;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<ProjectDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-builder.Services.AddAutoMapper(cfg => {
+builder.Services.AddScoped<IProjectRepository, EfProjectRepository>();
+builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddAutoMapper(cfg =>
+{
     cfg.AddMaps(Assembly.GetExecutingAssembly());
 });
 
@@ -32,7 +44,6 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
-
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

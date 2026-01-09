@@ -34,8 +34,8 @@ namespace ProjectManager.Application.Security
             var creds = BuildCredentials();
             var claims = BuildClaims(user);
             var token = new JwtSecurityToken(
-                issuer: "YourIssuer",
-                audience: "YourAudience",
+                issuer: config["Jwt:Issuer"],
+                audience: config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds);

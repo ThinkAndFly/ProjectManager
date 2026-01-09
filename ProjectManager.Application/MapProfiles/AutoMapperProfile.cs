@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProjectManager.Application.DTO;
+using ProjectManager.Domain.Entities;
 
 namespace ProjectManager.Application.MapProfiles
 {
@@ -7,7 +8,7 @@ namespace ProjectManager.Application.MapProfiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<Domain.Entities.Project, ProjectDTO>();
+            CreateMap<Project, ProjectDTO>();
         }
     }
 }
