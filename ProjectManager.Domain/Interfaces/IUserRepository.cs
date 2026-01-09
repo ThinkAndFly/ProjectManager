@@ -4,6 +4,6 @@ namespace ProjectManager.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default);
+        Task<User?> GetByUsernameAsync(string username);
     }
 }

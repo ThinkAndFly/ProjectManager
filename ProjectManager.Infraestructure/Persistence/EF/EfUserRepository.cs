@@ -6,12 +6,12 @@ namespace ProjectManager.Infraestructure.Persistence.EF
 {
     public class EfUserRepository(ProjectManagerDbContext dbContext) : IUserRepository
     {
-        public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
+        public async Task<User?> GetByUsernameAsync(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 return null;
 
-            return await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserName == username, cancellationToken);
+            return await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserName == username);
         }
     }
 }

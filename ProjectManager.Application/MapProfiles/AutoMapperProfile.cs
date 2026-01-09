@@ -8,7 +8,7 @@ namespace ProjectManager.Application.MapProfiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<Project, ProjectDTO>();
+            CreateMap<Project, ProjectDTO>().ReverseMap();
         }
     }
 }

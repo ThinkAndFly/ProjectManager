@@ -8,15 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MSTest" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <ProjectReference Include="..\ProjectManager.Application\ProjectManager.Application.csproj" />
+    <ProjectReference Include="..\ProjectManager.Domain\ProjectManager.Domain.csproj" />
+    <ProjectReference Include="..\ProjectManager.Infraestructure\ProjectManager.Infraestructure.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectManager.Infraestructure.Pulumi\ProjectManager.Infraestructure.Pulumi.csproj" />
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
 </Project>
