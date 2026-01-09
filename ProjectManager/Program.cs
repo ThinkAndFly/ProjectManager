@@ -10,6 +10,7 @@ using ProjectManager.Domain.Entities;
 using ProjectManager.Domain.Interfaces;
 using ProjectManager.Infraestructure.Persistence.EF;
 using ProjectManager.Infraestructure.Security;
+using ProjectManager.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,11 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiExceptionFilter>();
+});
+
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 
