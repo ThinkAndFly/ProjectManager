@@ -1,0 +1,216 @@
+{
+	"info": {
+		"_postman_id": "a9ed13da-f6d5-468b-8fee-735d6724a39f",
+		"name": "ProjectManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3604521"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"testuser\",\r\n    \"password\":\"Test@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdCBVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoidGVzdHVzZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc2Nzk3MTQwMSwiaXNzIjoiUHJvamVjdE1hbmFnZXIiLCJhdWQiOiJQcm9qZWN0TWFuYWdlckNsaWVudHMifQ.gpw-YAXFtZqt91w58CuSJAjSOmyGTpym4eAqjz8Xtr1SJLGdl7MUihYPS1M9skqnzij5vPI4hAD57HJqOfh9y84tMbHgM0gGpDyFU3MNNLZmsc00CGX8eIWaXpwzuS--wxJozsqTphsTHEFfM7hD83-vmRNFu704o0z_m58XP4QkSE7Nsa3nei5SC6bK3ACxqZRcBOsrjeiBfxnjkMwGhGd71MKi4bJNXh0nJwZgxCCQkOYgH0Ogr4qirjpycu6YD198crRli7NOruQM4BZW5T4PekQjopyPkVAgJcQHmklZ_xbCInVtQvpW7BiJ1_BMyQ2M_pOCwoCn0g5Ru5AUwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"Test Project\",\r\n\"description\": \"Cladding estimation job\",\r\n\"ownerId\": \"testuser\",\r\n\"status\": \"active\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/projects/011a3990f2ee4d21a3b3c7d65899eb27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects",
+						"011a3990f2ee4d21a3b3c7d65899eb27"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"Project Codename WhiteRain\",\r\n\"description\": \"Snow simulation\",\r\n\"ownerId\": \"testuser\",\r\n\"status\": \"active\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/projects/011a3990f2ee4d21a3b3c7d65899eb27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"projects",
+						"011a3990f2ee4d21a3b3c7d65899eb27"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiVGVzdCBVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoidGVzdHVzZXJAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc2Nzk3MjY1MiwiaXNzIjoiUHJvamVjdE1hbmFnZXIiLCJhdWQiOiJQcm9qZWN0TWFuYWdlckNsaWVudHMifQ.DdDVa4P5nRoJvtrme9TKH7lsn6r1PEcmuEQT7cIxeA9rP3uI5VumMQ0NbEhcdwqUIW5l21A2fZFHfMfsmkXq8oBBKLL62vPMq0lutoh-PLn0teb9LorfmBRS7zJOi789k_wnFwXZKjX_ta7EfSD0g7MgqyQpNwPfaJZVmY74M-Wka7reI6WE1ZzP_c749x6j2DK8tVmE44GMlDb-sFs3WMKMUFPfIRu2b6rf3Cwfcnu1nr7AW2SUfitQ1VwmOOZEvYMkdMhhLp6jZa0S7yRgJR7oMAiMgoW5PJx4CzdXV8xqSs3jZNs92lF8ZlkPm1n2UraxXXUMNI7kHPTJkc8jRA",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
