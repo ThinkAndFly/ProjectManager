@@ -1,9 +1,19 @@
 <Solution>
-  <Project Path="ProjectManager.Application/ProjectManager.Application.csproj" />
-  <Project Path="ProjectManager.Domain/ProjectManager.Domain.csproj" />
-  <Project Path="ProjectManager.Infraestructure.Pulumi/ProjectManager.Infraestructure.Pulumi.csproj" />
-  <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj" />
-  <Project Path="ProjectManager.Test/ProjectManager.Test.csproj" />
-  <Project Path="ProjectManager/ProjectManager.Presentation.API.csproj" />
+  <Folder Name="/Application/">
+    <Project Path="ProjectManager.Application/ProjectManager.Application.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="ProjectManager.Domain/ProjectManager.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infraestructure/">
+    <Project Path="ProjectManager.Infraestructure.Pulumi/ProjectManager.Infraestructure.Pulumi.csproj" />
+    <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="ProjectManager/ProjectManager.Presentation.API.csproj" />
+  </Folder>
+  <Folder Name="/Test/">
+    <Project Path="ProjectManager.Test/ProjectManager.Test.csproj" />
+  </Folder>
   <Project Path="Util/Util.csproj" />
 </Solution>

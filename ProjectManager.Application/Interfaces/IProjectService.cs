@@ -15,6 +15,6 @@ namespace ProjectManager.Application.Interfaces
 
         Task<bool> DeleteAsync(string id);
 
-        Task<ProjectDTO?> GetStatsByIdAsync(string id);
+        Task<ProjectStatsDTO?> GetStatsByIdAsync(string id);
     }
 }
