@@ -28,6 +28,16 @@ namespace ProjectManager.Controllers
             return Ok(project);
         }
 
+        [HttpGet("{id}/stats")]
+        public async Task<ActionResult<ProjectStatsDTO>> GetStats(string id)
+        {
+            var stats = await projectService.GetStatsByIdAsync(id);
+            if (stats is null)
+                return NotFound();
+
+            return Ok(stats);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ProjectDTO>> Create([FromBody] ProjectDTO request)
         {

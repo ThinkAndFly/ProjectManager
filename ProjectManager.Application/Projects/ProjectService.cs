@@ -68,5 +68,29 @@ namespace ProjectManager.Application.Projects
             var deleted = await repository.DeleteAsync(id);
             return deleted;
         }
+
+        public async Task<ProjectStatsDTO?> GetStatsByIdAsync(string id)
+        {
+            var project = await GetByIdAsync(id);
+            if (project is null)
+                return null;
+
+            var now = DateTime.UtcNow;
+            var lastUpdate = project.UpdatedAtUtc ?? project.CreatedAtUtc;
+
+            var end = lastUpdate > now ? lastUpdate : now;
+            var daysActive = (end.Date - project.CreatedAtUtc.Date).Days;
+            if (daysActive < 0)
+                daysActive = 0;
+
+            return new ProjectStatsDTO
+            {
+                ProjectId = project.Id,
+                CreatedAtUtc = project.CreatedAtUtc,
+                LastUpdateUtc = lastUpdate,
+                DaysActive = daysActive,
+                Status = project.Status
+            };
+        }
     }
 }

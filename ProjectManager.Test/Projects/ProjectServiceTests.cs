@@ -1,11 +1,12 @@
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ProjectManager.Application.DTO;
+using ProjectManager.Application.MapProfiles;
 using ProjectManager.Application.Projects;
 using ProjectManager.Domain.Entities;
 using ProjectManager.Domain.Interfaces;
-using System.Threading;
 
 namespace ProjectManager.Test.Projects
 {
@@ -13,16 +14,26 @@ namespace ProjectManager.Test.Projects
     public class ProjectServiceTests
     {
         private Mock<IProjectRepository> repositoryMock = null!;
-        private Mock<IMapper> mapperMock = null!;
+        private IMapper mapper = null!; 
         private ProjectService service = null!;
 
         [TestInitialize]
         public void SetUp()
         {
             repositoryMock = new Mock<IProjectRepository>(MockBehavior.Strict);
-            mapperMock = new Mock<IMapper>(MockBehavior.Strict);
 
-            service = new ProjectService(repositoryMock.Object, mapperMock.Object);
+            // Configure AutoMapper with your profile
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperProfile>();
+            }, NullLoggerFactory.Instance);
+
+            // Optionally validate configuration once
+            config.AssertConfigurationIsValid();
+
+            mapper = config.CreateMapper();
+
+            service = new ProjectService(repositoryMock.Object, mapper);
         }
 
         [TestMethod]
@@ -40,33 +51,22 @@ namespace ProjectManager.Test.Projects
                 CreatedAtUtc = DateTime.UtcNow
             };
 
-            var dto = new ProjectDTO
-            {
-                Id = id,
-                Name = "Test",
-                Description = "Desc",
-                OwnerId = "owner",
-                Status = "Open"
-            };
-
             repositoryMock
                 .Setup(r => r.GetByIdAsync(id))
                 .ReturnsAsync(entity);
-
-            mapperMock
-                .Setup(m => m.Map<ProjectDTO>(entity))
-                .Returns(dto);
 
             // Act
             var result = await service.GetByIdAsync(id);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(dto.Id, result!.Id);
-            Assert.AreEqual(dto.Name, result.Name);
+            Assert.AreEqual(entity.Id, result!.Id);
+            Assert.AreEqual(entity.Name, result.Name);
+            Assert.AreEqual(entity.Description, result.Description);
+            Assert.AreEqual(entity.OwnerId, result.OwnerId);
+            Assert.AreEqual(entity.Status, result.Status);
 
             repositoryMock.VerifyAll();
-            mapperMock.VerifyAll();
         }
 
         [TestMethod]
@@ -84,7 +84,6 @@ namespace ProjectManager.Test.Projects
             // Assert
             Assert.IsNull(result);
             repositoryMock.VerifyAll();
-            mapperMock.Verify(m => m.Map<ProjectDTO>(It.IsAny<Project>()), Times.Never);
         }
 
         [TestMethod]
@@ -116,48 +115,19 @@ namespace ProjectManager.Test.Projects
                 }
             };
 
-            var dtos = new[]
-            {
-                new ProjectDTO
-                {
-                    Id = "p1",
-                    Name = "P1",
-                    Description = "D1",
-                    OwnerId = ownerId,
-                    Status = status
-                },
-                new ProjectDTO
-                {
-                    Id = "p2",
-                    Name = "P2",
-                    Description = "D2",
-                    OwnerId = ownerId,
-                    Status = status
-                }
-            };
-
             repositoryMock
                 .Setup(r => r.GetAsync(status, ownerId))
                 .ReturnsAsync(entities);
-
-            mapperMock
-                .Setup(m => m.Map<ProjectDTO>(entities[0]))
-                .Returns(dtos[0]);
-
-            mapperMock
-                .Setup(m => m.Map<ProjectDTO>(entities[1]))
-                .Returns(dtos[1]);
 
             // Act
             var result = (await service.GetAsync(status, ownerId)).ToArray();
 
             // Assert
-            Assert.AreEqual(2, result.Length);
-            Assert.AreEqual(dtos[0].Id, result[0].Id);
-            Assert.AreEqual(dtos[1].Id, result[1].Id);
+            Assert.HasCount(2, result);
+            Assert.AreEqual("p1", result[0].Id);
+            Assert.AreEqual("p2", result[1].Id);
 
             repositoryMock.VerifyAll();
-            mapperMock.VerifyAll();
         }
 
         [TestMethod]
@@ -184,30 +154,21 @@ namespace ProjectManager.Test.Projects
                 CreatedAtUtc = DateTime.UtcNow
             };
 
-            var mappedDto = new ProjectDTO
-            {
-                Id = createdEntity.Id,
-                Name = createdEntity.Name,
-                Description = createdEntity.Description,
-                OwnerId = createdEntity.OwnerId,
-                Status = createdEntity.Status
-            };
-
             repositoryMock
                 .Setup(r => r.CreateAsync(It.IsAny<Project>()))
-                .Callback<Project>((p) => capturedEntity = p)
+                .Callback<Project>(p => capturedEntity = p)
                 .ReturnsAsync(createdEntity);
 
-            mapperMock
-                .Setup(m => m.Map<ProjectDTO>(createdEntity))
-                .Returns(mappedDto);
-
-            // Act
+            // Act – this will use ProjectService + real AutoMapper
             var result = await service.CreateAsync(input);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(mappedDto.Id, result.Id);
+            Assert.AreEqual(createdEntity.Id, result.Id);
+            Assert.AreEqual(createdEntity.Name, result.Name);
+            Assert.AreEqual(createdEntity.Description, result.Description);
+            Assert.AreEqual(createdEntity.OwnerId, result.OwnerId);
+            Assert.AreEqual(createdEntity.Status, result.Status);
 
             Assert.IsNotNull(capturedEntity);
             Assert.AreEqual(input.Name, capturedEntity!.Name);
@@ -217,7 +178,6 @@ namespace ProjectManager.Test.Projects
             Assert.IsFalse(string.IsNullOrWhiteSpace(capturedEntity.Id));
 
             repositoryMock.VerifyAll();
-            mapperMock.VerifyAll();
         }
 
         [TestMethod]
@@ -243,8 +203,6 @@ namespace ProjectManager.Test.Projects
             // Assert
             Assert.IsNull(result);
             repositoryMock.VerifyAll();
-            repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Project>()), Times.Never);
-            mapperMock.Verify(m => m.Map<ProjectDTO>(It.IsAny<Project>()), Times.Never);
         }
 
         [TestMethod]
@@ -283,15 +241,6 @@ namespace ProjectManager.Test.Projects
                 UpdatedAtUtc = DateTime.UtcNow
             };
 
-            var mappedDto = new ProjectDTO
-            {
-                Id = updatedEntity.Id,
-                Name = updatedEntity.Name,
-                Description = updatedEntity.Description,
-                OwnerId = updatedEntity.OwnerId,
-                Status = updatedEntity.Status
-            };
-
             repositoryMock
                 .Setup(r => r.GetByIdAsync(id))
                 .ReturnsAsync(existing);
@@ -301,16 +250,18 @@ namespace ProjectManager.Test.Projects
                 .Callback<Project>(p => updatedPassedToRepo = p)
                 .ReturnsAsync(updatedEntity);
 
-            mapperMock
-                .Setup(m => m.Map<ProjectDTO>(updatedEntity))
-                .Returns(mappedDto);
-
             // Act
             var result = await service.UpdateAsync(id, dto);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(mappedDto.Id, result!.Id);
+            Assert.AreEqual(updatedEntity.Id, result!.Id);
+            Assert.AreEqual(updatedEntity.Name, result.Name);
+            Assert.AreEqual(updatedEntity.Description, result.Description);
+            Assert.AreEqual(updatedEntity.OwnerId, result.OwnerId);
+            Assert.AreEqual(updatedEntity.Status, result.Status);
+
+            Assert.IsNotNull(updatedPassedToRepo);
             Assert.AreEqual(dto.Name, updatedPassedToRepo!.Name);
             Assert.AreEqual(dto.Description, updatedPassedToRepo.Description);
             Assert.AreEqual(dto.OwnerId, updatedPassedToRepo.OwnerId);
@@ -318,7 +269,6 @@ namespace ProjectManager.Test.Projects
             Assert.IsNotNull(updatedPassedToRepo.UpdatedAtUtc);
 
             repositoryMock.VerifyAll();
-            mapperMock.VerifyAll();
         }
 
         [TestMethod]
