@@ -5,10 +5,10 @@ using ProjectManager.Application.DTO;
 namespace ProjectManager.Presentation.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController(ISecurityService security) : ControllerBase
     {
-        [HttpPost(Name = "login")]
+        [HttpPost("login")]
         public async Task<IResult> Login(LoginDTO login)
         {
             var token = await security.Login(login);

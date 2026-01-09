@@ -44,7 +44,20 @@ namespace ProjectManager.Infraestructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
-        }
+
+            migrationBuilder.InsertData(
+            table: "Users",
+            columns: new[] { "Id", "Name", "UserName", "PasswordHash", "Email", "Role" },
+            values: new object[]
+            {
+                  1,
+                  "Test User",
+                  "AQAAAAEAACcQAAAAEPww4Mq22FqSB13tXFjr9s47iX5LSrwxEEjmY9U80gmks0dyKsbDFCHmqcLU6s+L1Q==",
+                  "Test@123",
+                  "testuser@example.com",
+                  0 // or whatever enum/int value corresponds to your default role
+            });
+            }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)

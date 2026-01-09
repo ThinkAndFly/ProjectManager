@@ -5,4 +5,5 @@
   <Project Path="ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj" />
   <Project Path="ProjectManager.Test/ProjectManager.Test.csproj" />
   <Project Path="ProjectManager/ProjectManager.Presentation.API.csproj" />
+  <Project Path="Util/Util.csproj" />
 </Solution>
