@@ -16,6 +16,7 @@ COPY ProjectManager.Application/ProjectManager.Application.csproj ProjectManager
 COPY ProjectManager.Domain/ProjectManager.Domain.csproj ProjectManager.Domain/
 COPY ProjectManager.Infraestructure/ProjectManager.Infraestructure.DataAccess.csproj ProjectManager.Infraestructure/
 COPY ProjectManager.Infraestructure.Pulumi/ProjectManager.Infraestructure.Pulumi.csproj ProjectManager.Infraestructure.Pulumi/
+COPY ProjectManager.Infraestructure.Messaging/ProjectManager.Infraestructure.Messaging.csproj ProjectManager.Infraestructure.Messaging/
 
 # Restore from API project folder
 WORKDIR /src/ProjectManager
