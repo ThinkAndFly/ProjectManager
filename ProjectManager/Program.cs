@@ -11,6 +11,7 @@ using ProjectManager.Domain.Interfaces;
 using ProjectManager.Infraestructure.Persistence.EF;
 using ProjectManager.Infraestructure.Security;
 using ProjectManager.Filters;
+using ProjectManager.Infraestructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,10 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(AutoMapperProfile).Assembly);
 });
+builder.Services.Configure<RabbitMqOptions>(
+    builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton<IMessagePublisher, RabbitMqMessagePublisher>();
+builder.Services.AddHostedService<RabbitMqWorker>();
 
 var publicKey = RSAKeyHelper.GetPublicKey(builder.Configuration);
 

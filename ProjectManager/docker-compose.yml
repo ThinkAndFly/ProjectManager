@@ -24,5 +24,15 @@ services:
     volumes:
       - sql_data:/var/opt/mssql
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: myapp-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
 volumes:
   sql_data:

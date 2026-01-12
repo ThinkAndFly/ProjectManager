@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectManager.Application\ProjectManager.Application.csproj" />
+    <ProjectReference Include="..\ProjectManager.Infraestructure.Messaging\ProjectManager.Infraestructure.Messaging.csproj" />
   </ItemGroup>
 
 </Project>
